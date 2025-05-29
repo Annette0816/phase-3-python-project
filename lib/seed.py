@@ -1,6 +1,6 @@
-from lib.models.artist import Artist
-from lib.models.album import Album
-from lib.models.song import Song
+from models.artist import Artist
+from models.album import Album
+from models.song import Song
 
 
 Artist.drop_table()
@@ -10,7 +10,7 @@ Song.drop_table()
 Artist.create_table()
 Album.create_table()
 Song.create_table()
-s
+
 artist1 = Artist.create("Aubrey Graham", "Drake")
 artist2 = Artist.create("Onika Maraj", "Nicki Minaj")
 

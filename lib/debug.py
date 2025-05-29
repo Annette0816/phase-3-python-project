@@ -1,11 +1,8 @@
-import sys
-import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from lib.models.__init__ import CONN, CURSOR
-from lib.models.artist import Artist
-from lib.models.album import Album
-from lib.models.song import Song
+from models.__init__ import CONN, CURSOR
+from models.artist import Artist
+from models.album import Album
+from models.song import Song
 import ipdb
 
 
@@ -18,7 +15,7 @@ Album.create_table()
 Song.create_table()
 
 artist = Artist.create("Beyoncé Knowles", "Beyoncé")
-album = Album.create("Renaissance", "2022")
+album = Album.create("Renaissance", "2022-07-29",artist)
 song = Song.create("Break My Soul", "ft. Beyoncé", artist, album)
 
 ipdb.set_trace()

@@ -1,5 +1,5 @@
 from models.__init__ import CURSOR, CONN
-
+from models.artist import Artist
 class Album:
     all = {}
 
@@ -108,6 +108,9 @@ class Album:
     
     @classmethod
     def instance_from_db(cls, row):
-        return cls(row["title"], row["release_date"], row["id"])
+         artist = Artist.find_by_id(row["artist_id"])
+         if not artist:
+                raise ValueError(f"Artist with id {row['artist_id']} not found.")
+         return cls(row["title"], row["release_date"],artist, row["id"])
 
    

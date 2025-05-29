@@ -7,7 +7,7 @@ class Artist:
         self.id = id
         self.name = name
         self.stage_name = stage_name
-       
+        Artist.all[self.id] = self
 
     def __repr__(self):
         return f"<Artist {self.id}: {self.name} aka {self.stage_name}>"
@@ -34,6 +34,15 @@ class Artist:
             self._stage_name = value
         else:
             raise ValueError("Stage name  must be a non-empty string.")
+    
+
+    def albums(self):
+      from models.album import Album
+      return [album for album in Album.all.values() if album.artist.id == self.id]
+
+    def songs(self):
+     from models.song import Song
+     return [song for song in Song.all.values() if song.artist.id == self.id]
 
     @classmethod
     def create_table(cls):
@@ -46,7 +55,7 @@ class Artist:
         """
         CURSOR.execute(sql)
         CONN.commit()
-
+        
     @classmethod
     def drop_table(cls):
         CURSOR.execute("DROP TABLE IF EXISTS artists")
@@ -67,7 +76,7 @@ class Artist:
         artist = cls(name, stage_name)
         artist.save()
         return artist
-
+        
     @classmethod
     def find_by_id(cls, id):
         row = CURSOR.execute("SELECT * FROM artists WHERE id = ?", (id,)).fetchone()
@@ -101,4 +110,5 @@ class Artist:
     
     @classmethod
     def instance_from_db(cls, row):
-        return cls(row["name"], row["id"], row["stage_name"])
+        return cls(row["name"], row["stage_name"], row["id"])
+

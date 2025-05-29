@@ -30,11 +30,10 @@ class Song:
 
     @features.setter
     def features(self, value):
-        if isinstance(value, str) and len(value):
-            self._features = value
-        else:
-            raise ValueError("Features must be a non-empty string.")
-
+     if isinstance(value, str):
+        self._features = value if value else None 
+        raise ValueError("Features must be a string.")
+   
     @classmethod
     def create_table(cls):
         sql = """
@@ -58,17 +57,18 @@ class Song:
 
     def save(self):
         sql = """
-            INSERT INTO songs (title, features, album_id, artist_id)
-            VALUES (?, ?, ?)
+            INSERT INTO songs (title, features, artist_id, album_id)
+            VALUES (?, ?, ?, ?)
         """
-        CURSOR.execute(sql, (self.title,self.features ,self.album.id, self.artist.id))
+        features_to_save = self.features if self.features is not None else ""
+        CURSOR.execute(sql, (self.title, features_to_save, self.artist.id, self.album.id))
         CONN.commit()
         self.id = CURSOR.lastrowid
-        type(self).all[self.id] = self
+        type(self).all[self.id] = self 
 
     @classmethod
-    def create(cls, title, features, album , artist):
-        song = cls(title, features, album, artist)
+    def create(cls, title, features, artist, album):
+        song = cls(title, features, artist, album)
         song.save()
         return song
 
